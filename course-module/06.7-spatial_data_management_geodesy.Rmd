@@ -1,0 +1,100 @@
+---
+title: "Spatial data management and geodesy"
+author: |
+  | Deependra Dhakal
+  | Assistant Professor
+  | \textit{ddhakal.rookie@gmail.com}
+  | \url{https://rookie.rbind.io}
+output: 
+  binb::monash:
+    toc: true
+    keep_tex: true
+    slide_level: 2
+    includes:
+      in_header: beamer_header_template.tex
+colortheme: monashwhite
+outertheme: smoothtree
+innertheme: rounded
+innercolortheme: rose
+outercolortheme: whale
+linkcolor: red
+urlcolor: lightgrayd
+# titlefontsize: 22pt # breaks custom \lineskip
+titlepage: falcon.png
+fontsize: 11pt
+classoption: "aspectratio=169" # "compressed"
+bibliography: [./../bibliographies.bib]
+header-includes: 
+  - \AtBeginSubsection{}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+require(tidyverse)
+require(sf)
+require(sp)
+
+set.seed(453)
+# invalidate cache when the package version changes
+knitr::opts_chunk$set(tidy = FALSE, echo = FALSE, 
+                  message = FALSE, warning = FALSE,
+                  out.width = "45%", cache = TRUE, 
+                  dev.args=list(bg=grey(0.9), pointsize=11))
+options(knitr.table.format = "latex")
+options(knitr.kable.NA = "", digits = 2)
+options(kableExtra.latex.load_packages = FALSE)
+theme_set(theme_bw())
+```
+
+# Infrared imagery
+
+##
+
+```{r}
+# source literature: https://www.e-education.psu.edu/meteo3/l5_p5.html
+# source data: https://www.e-education.psu.edu/meteo3/sites/www.e-education.psu.edu.meteo3/files/images/lesson5/ir_fog0308.png
+```
+
+## ARGOS-4
+
+literature source: https://www.nesdis.noaa.gov/next-generation/argos-4-launch
+ARGOS-4 launch is set for September 29, 2022
+
+Once in orbit, Argos-4 will join a network of other Argos instruments onboard other polar orbiting satellites to collect a variety of data from both stationary and mobile transmitters around the world. This vital information helps provide a better understanding of Earth’s physical and biological environment, including its weather and climate, biodiversity and ecosystems, as well as assist with maritime security, offshore pollution, and humanitarian assistance.
+
+## Free gis data
+
+https://freegisdata.rtwilson.com/
+
+# Introduction to geospatial data
+
+## Spatial dataset: An example
+
+```{r example-data}
+p1 = st_point(c(7,52))
+p2 = st_point(c(-30,20))
+
+# let's set the projection to longlat with WGS84, epsg code 4326
+sfc = st_sfc(p1, p2, crs = 4326) # crs is equivalent to "+init=epsg:4326 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+towgs84=0,0,0"; this information is obtained with
+# CRS("+init=epsg:4326")
+
+# # setting crs is done by
+sfc %>% 
+  st_transform(crs = "+init=epsg:3857") # mercator projection, google maps/osm maps tiles
+
+sfc %>% 
+  st_transform(crs = "+init=epsg:4269") # longlat projection with NAD83
+
+ggplot() +
+  geom_sf(data = st_geometry(sfc)) +
+  theme_minimal() +
+  coord_sf(crs = "+init=epsg:3857")
+```
+
+##
+
+https://erinbecker.github.io/r-raster-vector-geospatial/aio.html
+
+# Bibliography
+
+## References

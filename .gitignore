@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+literatures
+data/data_nepal_population_density
+data/data_nepal_population_density/*
+scripts
