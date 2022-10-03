@@ -39,13 +39,11 @@
 % Title page
 \setbeamertemplate{title page}
 {\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{sissooleafwaterdrops.jpg}
-% \begin{textblock}{7.5}(1,2.8)\usebeamerfont{title} % original
-\begin{textblock}{15}(1,2.2)\usebeamerfont{title}
+\begin{textblock}{7.5}(1,2.8)\usebeamerfont{title}
 {\color{white}\raggedright\par\inserttitle}
 \end{textblock}
-\begin{textblock}{10}(1,6)
-\small
-{\color{white}\raggedright{\insertauthor}\mbox{}\\[0.1cm]
+\begin{textblock}{7.5}(1,7)
+{\color{white}\raggedright{\insertauthor}\mbox{}\\[0.2cm]
 \insertdate}
 \end{textblock}}
 
@@ -168,6 +166,7 @@
     {\setlength{\parindent}{0pt}%
     \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces}%
     {\par}
+  \AtBeginSubsection{}
 
   \title[]{Crop discrimination, crop cutting, yield monitoring, soil
 mapping and STCR}
@@ -424,9 +423,20 @@ Assistant Professor\\
 \begin{aligned}
 WG_{14\%} = FW \times \frac{100-MCG}{100-14} = FW \times \frac{100-20}{100-14}
 \end{aligned}
-\] where, \(FW\) = Fresh weight, \(MCG\) (in \%) = Moisture content of
-grain when fresh (say 20\%), \(WG_{14}\) (in \%) = Weight of grain
-adjusted to 14\% moisture content.
+\] where:
+
+\footnotesize
+
+\begin{itemize}
+\tightlist
+\item
+  \(FW\) = Fresh weight,
+\item
+  \(MCG\) (in \%) = Moisture content of grain when fresh (say 20\%),
+\item
+  \(WG_{14}\) (in \%) = Weight of grain adjusted to 14\% moisture
+  content.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Requirements for crop cutting experiment}
@@ -462,12 +472,21 @@ adjusted to 14\% moisture content.
 
 \[
 \text{Crop production} (P) = A \times Y
-\] - In countries where cadastral maps are available not no regular
-reporting system, both A and Y are estimated on the basis of sample
-surveys. - Usually large sample of villages (primary units) is selected
-for crop area estimation. This provides estimate of A - CCE are carried
-out in a sub-sample of the primary units selected for area enumeration.
-This provides estimate of \(Y\).
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  In countries where cadastral maps are available not no regular
+  reporting system, both A and Y are estimated on the basis of sample
+  surveys.
+\item
+  Usually large sample of villages (primary units) is selected for crop
+  area estimation. This provides estimate of A
+\item
+  CCE are carried out in a sub-sample of the primary units selected for
+  area enumeration. This provides estimate of \(Y\).
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Estimation}
@@ -515,10 +534,16 @@ produce per hectare is given by:
 \hat{\bar{Y}}^m = d \times f \frac{\sum^S_{s = 1} a_s \hat{\bar{Y}}_s^g}{\sum^S_{s = 1}a_s}
 \]
 
-Where,
+Where:
 
-d: driage ratio, f: conversion factor for green yield to dry marketable
-produce per hectare i.e.~rice = 2/3 of paddy.
+\begin{itemize}
+\tightlist
+\item
+  d: driage ratio,
+\item
+  f: conversion factor for green yield to dry marketable produce per
+  hectare i.e.~rice = 2/3 of paddy.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Remote sensing for crop cut surveys}
@@ -637,134 +662,6 @@ discrimination}\label{cropvegetation-discrimination}}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Preprocessing}
-\protect\hypertarget{preprocessing}{}
-\begin{itemize}
-\tightlist
-\item
-  To remove noise and increase the interpretability of image data
-  (essential when a time series of imagery is used or when when multiple
-  image operation such as join is required to account for an area
-  encompassed by many images to make these images compatible spatially
-  and spectrally)
-\item
-  All images after image preprocessing should appear as if they were
-  acquired from the same sensor (Hall et al.~1991).
-\item
-  Image processing sensors are usually categorized into levels (0, 1A,
-  1B, 2A, 2B, 3A, 3B with image quality gradually increased). For
-  example, for most sensors, level 3A means that radiometric correction,
-  geometric correction and orthorectification have been processed for
-  the images.
-\item
-  Factors such as seasonal phenology, ground conditions and atmospheric
-  conditions can contribute to variability in multi-temporal spectral
-  responses that may have little to do with the remote sensed objects
-  themselves (Song and Woodcock 2003)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{}
-\protect\hypertarget{section-7}{}
-\begin{itemize}
-\tightlist
-\item
-  Image preprocessing commonly comprises a series of operations,
-
-  \begin{itemize}
-  \tightlist
-  \item
-    including but not limited to bad lines replacement,
-  \item
-    radiometric correction,
-  \item
-    geometric correction,
-  \item
-    image enhancement and masking (e.g.~for clouds, water, irrelevant
-    features) although variations may exist for images acquired by
-    different sensors.
-  \item
-    bad line replacement (fills in missing lines with the line above,
-    below or with an average of the two) to determine the overall
-    quality of the images (e.g.~missing data lines) through visually
-    previewing the images band-by-band
-  \item
-    cloud imposes a big noise in mapping vegetation cover for
-    identifying and thus has to be removed or masked.
-
-    \begin{itemize}
-    \tightlist
-    \item
-      neural network to detect cloud in SPOT VEGETATION images
-    \item
-      cloud-free space shuttle photograph to detect and remove (mask)
-      unwanted cloud covers in Landsat TM scenes
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Image pre-processing: Radiometric correction}
-\protect\hypertarget{image-pre-processing-radiometric-correction}{}
-\begin{itemize}
-\tightlist
-\item
-  radiometric correction normally involves the process of correcting
-  radiometric errors or distortions of digital images to improve the
-  fidelity of the brightness values. radiometric correction methods
-  (absolute and relative correction):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    complex mathematical models that describe the main interactions
-    involved (certain parameters (i.e.~the atmospheric composition) must
-    be known before applying them).
-  \item
-    methods based on the observations of reference targets (e.g.~water
-    or desert land) whose radiometry is known.
-  \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Image pre-processing: Geometric correction}
-\protect\hypertarget{image-pre-processing-geometric-correction}{}
-\begin{itemize}
-\tightlist
-\item
-  geometric correction to avoid geometric distortions from a distorted
-  image and is achieved by establishing the relationship between the
-  image coordinate system and the geographic coordinate system using the
-  calibration data of the sensor, the measured data of position and
-  altitude and the ground control points
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Image pre-processing: Image enhancement}
-\protect\hypertarget{image-pre-processing-image-enhancement}{}
-\begin{itemize}
-\tightlist
-\item
-  image enhancement is aimed to emphasize and sharpen particular image
-  features (i.e.~particular species of vegetation) for visualization
-  purpose
-
-  \begin{itemize}
-  \tightlist
-  \item
-    gray scale conversion,
-  \item
-    histogram conversion,
-  \item
-    color composition,
-  \item
-    color conversion between red-green-blue (RGB), and
-  \item
-    hue--saturation--intensity transform (HSI), etc.
-  \end{itemize}
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Normalized difference vegetation index}
 \protect\hypertarget{normalized-difference-vegetation-index}{}
 \begin{itemize}
@@ -788,7 +685,7 @@ discrimination}\label{cropvegetation-discrimination}}
 \end{frame}
 
 \begin{frame}{}
-\protect\hypertarget{section-8}{}
+\protect\hypertarget{section-7}{}
 \begin{itemize}
 \tightlist
 \item
@@ -810,7 +707,7 @@ discrimination}\label{cropvegetation-discrimination}}
 \end{frame}
 
 \begin{frame}{}
-\protect\hypertarget{section-9}{}
+\protect\hypertarget{section-8}{}
 NDVI is calculated from these individual measurements as follows:
 
 \[
@@ -823,6 +720,19 @@ These spectral reflectances are themselves ratios of the reflected
 radiation to the incoming radiation in each spectral band individually,
 hence they take on values between 0 and 1. By design, the NDVI itself
 thus varies between -1 and +1.
+\end{frame}
+
+\begin{frame}{NDVI of Bagmati Province (April 25, 2022)}
+\protect\hypertarget{ndvi-of-bagmati-province-april-25-2022}{}
+\begin{center}\includegraphics[width=0.7\linewidth]{../images/r_lc09_bagmati_raster_ndvi_value} \end{center}
+\end{frame}
+
+\begin{frame}{Practical -- NDVI (of Bagmati Province) calculation in
+QGIS}
+\protect\hypertarget{practical-ndvi-of-bagmati-province-calculation-in-qgis}{}
+Refer to the qgis project file
+``qgis\_bagmati\_province\_LC09\_raster,'' for use in calculation of
+NDVI.
 \end{frame}
 
 \hypertarget{bibliography}{%

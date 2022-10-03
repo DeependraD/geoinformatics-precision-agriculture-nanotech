@@ -125,7 +125,13 @@ $$
 WG_{14\%} = FW \times \frac{100-MCG}{100-14} = FW \times \frac{100-20}{100-14}
 \end{aligned}
 $$
-where, $FW$ = Fresh weight, $MCG$ (in %) = Moisture content of grain when fresh (say 20%), $WG_{14}$ (in %) = Weight of grain adjusted to 14% moisture content.
+where: 
+
+\footnotesize
+
+- $FW$ = Fresh weight,
+- $MCG$ (in %) = Moisture content of grain when fresh (say 20%),
+- $WG_{14}$ (in %) = Weight of grain adjusted to 14% moisture content.
 
 ## Requirements for crop cutting experiment
 
@@ -144,6 +150,7 @@ where, $FW$ = Fresh weight, $MCG$ (in %) = Moisture content of grain when fresh 
 $$
 \text{Crop production} (P) = A \times Y
 $$
+
 - In countries where cadastral maps are available not no regular reporting system, both A and Y are estimated on the basis of sample surveys.
 - Usually large sample of villages (primary units) is selected for crop area estimation. This provides estimate of A
 - CCE are carried out in a sub-sample of the primary units selected for area enumeration. This provides estimate of $Y$.
@@ -180,10 +187,10 @@ $$
 \hat{\bar{Y}}^m = d \times f \frac{\sum^S_{s = 1} a_s \hat{\bar{Y}}_s^g}{\sum^S_{s = 1}a_s}
 $$
 
-Where,
+Where:
 
-d: driage ratio, 
-f: conversion factor for green yield to dry marketable produce per hectare i.e. rice = 2/3 of paddy.
+- d: driage ratio, 
+- f: conversion factor for green yield to dry marketable produce per hectare i.e. rice = 2/3 of paddy.
 
 ## Remote sensing for crop cut surveys
 
@@ -223,6 +230,7 @@ https://www.icrisat.org/icrisat-uses-satellite-data-to-assess-crop-cutting-exper
 knitr::include_graphics("../images/spectral_evolution_portable_spectroradiometer.png")
 ```
 
+
 ##
 
 - Vegetation extraction from remote sensing imagery is the process of extracting vegetation information by interpreting satellite images based on the interpretation elements such as the image color, texture, tone, pattern and association information, etc.
@@ -230,44 +238,6 @@ knitr::include_graphics("../images/spectral_evolution_portable_spectroradiometer
 - General steps involved in vegetation mapping include
   - image preprocessing (improve the quality of original images, highlighting the distinguishing features)
   - image classification (results in the assignment of each pixel of the scene to one of the vegetation groups defined in a vegetation classification system or a membership matrix of the vegetation groups if fuzzy classification is adopted)
-
-## Preprocessing 
-
-- To remove noise and increase the interpretability of image data (essential when a time series of imagery is used or when when multiple image operation such as join is required to account for an area encompassed by many images to make these images compatible spatially and spectrally)
-- All images after image preprocessing should appear as if they were acquired from the same sensor (Hall et al. 1991).
-- Image processing sensors are usually categorized into levels (0, 1A, 1B, 2A, 2B, 3A, 3B with image quality gradually increased). For example, for most sensors, level 3A means that radiometric correction, geometric correction and orthorectification have been processed for the images.
-- Factors such as seasonal phenology, ground conditions and atmospheric conditions can contribute to variability in multi-temporal spectral responses that may have little to do with the remote sensed objects themselves (Song and Woodcock 2003)
-
-##
-
-- Image preprocessing commonly comprises a series of operations,
-  - including but not limited to bad lines replacement,
-  - radiometric correction,
-  - geometric correction,
-  - image enhancement and masking (e.g. for clouds, water, irrelevant features) although variations may exist for images acquired by different sensors.
-  - bad line replacement (fills in missing lines with the line above, below or with an average of the two) to determine the overall quality of the images (e.g. missing data lines) through visually previewing the images band-by-band
-  - cloud imposes a big noise in mapping vegetation cover for identifying and thus has to be removed or masked.
-    - neural network to detect cloud in SPOT VEGETATION images
-    - cloud-free space shuttle photograph to detect and remove (mask) unwanted cloud covers in Landsat TM scenes  
-
-## Image pre-processing: Radiometric correction
-
-- radiometric correction normally involves the process of correcting radiometric errors or distortions of digital images to improve the fidelity of the brightness values. radiometric correction methods (absolute and relative correction):
-  - complex mathematical models that describe the main interactions involved (certain parameters (i.e. the atmospheric composition) must be known before applying them). 
-  - methods based on the observations of reference targets (e.g. water or desert land) whose radiometry is known.
-
-## Image pre-processing: Geometric correction
-
-- geometric correction to avoid geometric distortions from a distorted image and is achieved by establishing the relationship between the image coordinate system and the geographic coordinate system using the calibration data of the sensor, the measured data of position and altitude and the ground control points
-
-## Image pre-processing: Image enhancement
-
-- image enhancement is aimed to emphasize and sharpen particular image features (i.e. particular species of vegetation) for visualization purpose
-  - gray scale conversion,
-  - histogram conversion,
-  - color composition,
-  - color conversion between red-green-blue (RGB), and
-  - hue–saturation–intensity transform (HSI), etc.
 
 ## Normalized difference vegetation index
 
@@ -293,13 +263,62 @@ $$
 
 where Red and NIR stand for the spectral reflectance measurements acquired in the red (visible) and near-infrared regions, respectively. These spectral reflectances are themselves ratios of the reflected radiation to the incoming radiation in each spectral band individually, hence they take on values between 0 and 1. By design, the NDVI itself thus varies between -1 and +1.
 
-##
+## NDVI of Bagmati Province (April 25, 2022)
 
-https://michaelminn.net/tutorials/r-landsat/index.html
+```{r ndvi-bagmati-province-raster, message=FALSE, warning=FALSE, fig.align='center', out.width="70%"}
+# # install.packages(c("rgdal", "raster", "sf", "rasterVis", "leaflet"))
 
-##
+# require(sf)
+# require(raster)
+# require(leaflet)
+# require(tidyverse)
 
-https://ourcodingclub.github.io/tutorials/spatial/
+# lc09_bagmati_raster <- list.files("../big_data_n_scripts/LC09_bagmati_province_raster_clip/",
+#                                   recursive = FALSE, include.dirs = FALSE,
+#                                   pattern = "*.TIF$", full.names = TRUE)
+# 
+# lc09_bagmati_bands45 <- lc09_bagmati_raster[basename(lc09_bagmati_raster) %>% str_detect(".*(B[45])\\.TIF$")]
+# 
+# lc09_bagmati_raster4 <- raster(lc09_bagmati_bands45[1])
+# lc09_bagmati_raster5 <- raster(lc09_bagmati_bands45[2])
+
+# don't run this! uses up all the memory!
+# # lc09_bagmati_raster6 <- projectRaster(lc09_bagmati_raster4, lc09_bagmati_raster5)
+
+# plot(lc09_bagmati_raster4)
+# plot(lc09_bagmati_raster5)
+
+# cellStats(lc09_bagmati_raster4, "mean")
+# cellStats(lc09_bagmati_raster5, "mean")
+
+# ndvi_values <- (lc09_bagmati_raster5-lc09_bagmati_raster4)/(lc09_bagmati_raster5+lc09_bagmati_raster4)
+
+# png("../images/r_lc09_bagmati_raster_ndvi_value.png", units = "in", width = 7, height = 6, res = 300) 
+# par(mar=c(0.08,0.08,0.08,0.08)) #sets margins of plotting area
+# plot(ndvi_values, legend = FALSE, axes = FALSE, box = FALSE)
+# dev.off()
+
+knitr::include_graphics("../images/r_lc09_bagmati_raster_ndvi_value.png")
+
+# hist(ndvi_values)
+
+# get help from here: https://lpdaac.usgs.gov/resources/e-learning/getting-started-with-cloud-native-harmonized-landsat-sentinel-2-hls-data-in-r/
+
+# # write does not produce figure the way intended
+# raster::writeRaster(ndvi_values, filename="./r_lc09_bagmati_raster_ndvi_value", 
+#             options='INTERLEAVE=BAND',
+#             format='GTiff', datatype='INT2U', overwrite=TRUE)
+
+```
+
+
+## Practical -- NDVI (of Bagmati Province) calculation in QGIS
+
+Refer to the qgis project file "qgis_bagmati_province_LC09_raster", for use in calculation of NDVI.
+
+<!-- https://michaelminn.net/tutorials/r-landsat/index.html -->
+<!-- https://ourcodingclub.github.io/tutorials/spatial/x -->
+
 
 # Bibliography
 
