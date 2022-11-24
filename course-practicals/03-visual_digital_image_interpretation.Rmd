@@ -1,0 +1,147 @@
+---
+title: "Visual and digital interpretation of remote sensing images"
+author:
+  - Deependra Dhakal:
+      institute: [afu]
+      correspondence: "yes"
+      equal_contributor: "yes"
+      email: ddhakal.rookie@gmail.com
+institute:
+  - afu:
+      name: Agriculture and Forestry University, Kathmandu, Nepal
+# date: "2019-03-01"
+output: 
+  bookdown::pdf_document2:
+    template: null
+    toc: no
+    # toc_depth: 3
+    keep_tex: yes
+    includes:
+      in_header: header_template.tex
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+    latex_engine: xelatex
+  bookdown::word_document2:
+    toc: yes
+bibliography: bibfile.bib
+always_allow_html: true
+linenumbers: true
+numbersections: true
+linestretch: "`r (lstr <- 2)`"
+geometry: "top=0.85in,left=1in,footskip=0.75in,marginparwidth=2in"
+# abstract: |
+# keywords: 
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+require(tsibble)
+library(lubridate)
+require(DiagrammeR)
+require(viridis)
+
+theme_set(theme_light())
+knitr::opts_chunk$set(tidy = FALSE, cache = TRUE, 
+                      echo = FALSE, 
+                      tidy.opts = list(width.cutoff=50), 
+                      eval = TRUE, warning = FALSE, message = FALSE,
+                      # fig.show = "hold", 
+                      fig.align = "center", fig.width = 5,
+                      fig.asp = 0.9, out.width = "0.6\\linewidth")
+options(knitr.kable.NA = "", digits = 3)
+
+def.source.hook  <- knitr::knit_hooks$get("source")
+knitr::knit_hooks$set(source = function(x, options) {
+  x <- def.source.hook(x, options)
+  x <- ifelse(!is.null(options$linestretch), 
+              paste0("\\linespread{", options$linestretch,"}\n", x, "\n\n\\linespread{", lstr,"}"), 
+              x)
+  ifelse(!is.null(options$size), 
+         paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), 
+         x)
+})
+```
+
+```{r share-legend-grid}
+grid_arrange_share_legend <- function(..., nrow = 1, ncol = length(list(...)), position = c("bottom", "right")) {
+  plots <- list(...)
+  position <- match.arg(position)
+  g <- ggplot2::ggplotGrob(plots[[1]] + ggplot2::theme(legend.position = position))$grobs
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+  lwidth <- sum(legend$width)
+  gl <- lapply(plots, function(x) x + theme(legend.position = "none"))
+  gl <- c(gl, nrow = nrow, ncol = ncol)
+
+  combined <- switch(position,
+                     "bottom" = gridExtra::arrangeGrob(do.call(gridExtra::arrangeGrob, gl),
+                                            legend,
+                                            ncol = 1,
+                                            heights = grid::unit.c(unit(1, "npc") - lheight, lheight)),
+                     "right" = gridExtra::arrangeGrob(do.call(gridExtra::arrangeGrob, gl),
+                                           legend,
+                                           ncol = 2,
+                                           widths = grid::unit.c(unit(1, "npc") - lwidth, lwidth)))
+  grid::grid.newpage()
+  grid::grid.draw(combined)
+}
+```
+
+
+<!-- \linenumbers -->
+
+<!-- \newpage -->
+
+# Image
+
+##
+
+- Characteristics of image such as resolution determine the level of detail present in the remote sensing data and extraction of information from them.
+- Visual perception is the ability to interpret information and surroundings from the effects of visible light reaching the eye.
+- Interpretation is the process of extraction of qualitative and quantitative information of objects from aerial photographs or satellite images.
+  - Intensive process
+  - Knowledge (domain and image analysis) based process
+  - Perceptual process (subject to individual biases)
+- Visual image interpretation is useful in fields such as geography, geology, agriculture, forestry, environment, ocean studies, wetlands, conservation study, urban planning, defense and many other.
+- Under this practical session we learn to interpret an aerial imagery in a broad as well as specific context.
+
+##
+
+-  Visual interpretation involves visual analysis of aerial photographs and satellite images. When the interpretation is carried out with the help of computer software, it is known as digital interpretation.
+- An image interpretation is done by an analyst or interpreter, who communicates the information to others for purposes such as general notification, decision making, evaluation, etc.
+- Image interpretation process in steps
+  1. Obtain images from the known sensor -- preparation
+  2. Read the annotated data to orient image with base map -- Pre-works (with the help of compass )
+  3. Read the pattern and find the interpretation keys -- Image reading
+  4. Measure length, height, photo density (measure of brightness or darkness) of objects -- Image measurement
+  5. Image analysis/evaluation
+  6. Display the results of interpretation on base map -- Map generation
+- Elements of visual image interpretation
+  - Tone/color (relates to spectral reflectance characteristics of object; measured in intensity of reflected light)
+  - Size (function of scale and object size; measured as length or area)
+  - Shape
+  - Texture
+  - Pattern (land use for crop, housing, watermass)
+  - Shadow
+  - Site
+  - Association
+- False color composite (FCC) uses NIR, red and green combination for visual interpretation
+- Vegetation reflects much in NIR region of the electromagnetic spectrum therefore in standard FCC vegetation appears red, which is more suitable in vegetation identification.
+
+## Resolution
+
+- Resolution/resolving power is a measure of the ability of an optical system or other sensor to distinguish between signals that are spatially near or spectrally similar.
+- $\uparrow$ resolution increases interpretability
+- Resolution types
+  - Spatial resolution (how much detail in a photographic image visible to the eye; expressed in 'm'; determined by sensor characteristics, field of view, altitude, etc. and inversely related to return time and coverage area)
+  - Spectral resolution (how many spectral bands or how wide each spectral bands an instrument records)
+    - black and white films are recorded in wavelengths extending over a wide range, or all of the visible portion of electromagnetic spectrum -- a fairly coarse spectral resolution
+    - color film is sensitive to the reflected energy over the visible spectrum but as each sensor is sensitive to reflected energy at the blue, green and red wavelengths of the spectrum, it provides a higher spectral resolution. 
+  - Temporal resolution (Time between two subsequent data acquisitions for area, also known as "return time"; in satellites, return time depends on orbital characteristics (low vs high orbit), the **swath width** and wheather or not there is an ability to **point** the sensor)
+    - Landsat has return time of approximately 16 days
+  - Radiometric resolution (how finely a satellite or sensor divides up the radiance it receives in each band; measured as bits per pixels (8-bit, 16-bit); inversely proportional to contrast.)
+
+- Panchromatic images are created when the imaging sensor is sensitive to a wide range of wavelengths of light, typically spanning a large part of the visible part of the spectrum. All imaging sensors need a certain minimum amount of light energy before they can detect a difference in brightness. If the sensor is only sensitive (or is only directed) to light from a very specific part of the spectrum, say for example the blue wavelengths, then there is a limited amount of energy available to the sensor compared to a sensor that samples across a wider range of wavelengths. To compensate for this limited energy availability, multi-spectral sensors (the kind that create red, green, blue, near infrared images) will typically sample over a larger spatial extent to get the necessary amount of energy needed to 'fill' the imaging detector. Thus, multispectral band images will typically be of a coarser spatial resolution than a panchromatic image.
+
+# Bibliography

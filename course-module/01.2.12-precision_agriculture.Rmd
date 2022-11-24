@@ -1,0 +1,444 @@
+---
+title: "Precision agriculture"
+subtitle: "Concepts and techniques, tools of precison agriculture used in abroad and Nepal; STCR approach"
+author: |
+  | Deependra Dhakal
+  | Assistant Professor
+  | \textit{ddhakal.rookie@gmail.com}
+  | \url{https://rookie.rbind.io}
+output: 
+  binb::monash:
+    toc: true
+    keep_tex: true
+    citation_package: natbib
+    slide_level: 2
+    includes:
+      in_header: beamer_header_template.tex
+colortheme: monashwhite
+outertheme: smoothtree
+innertheme: rounded
+innercolortheme: rose
+outercolortheme: whale
+linkcolor: red
+urlcolor: lightgrayd
+# titlefontsize: 22pt # breaks custom \lineskip
+titlepage: falcon.png
+fontsize: 11pt
+classoption: "aspectratio=169" # "compressed"
+bibliography: [./../bibliographies.bib]
+header-includes: 
+  - \AtBeginSubsection{}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+require(tidyverse)
+set.seed(453)
+# invalidate cache when the package version changes
+knitr::opts_chunk$set(tidy = FALSE, echo = FALSE, 
+                  message = FALSE, warning = FALSE,
+                  out.width = "45%", cache = TRUE, 
+                  dev.args=list(bg=grey(0.9), pointsize=11))
+options(knitr.table.format = "latex")
+options(knitr.kable.NA = "", digits = 2)
+options(kableExtra.latex.load_packages = FALSE)
+theme_set(theme_bw())
+```
+
+# Concepts and techniques
+
+##
+
+\begin{alert}{Course objectives:}
+The objective of this course is to provide theory as well as hands-on skill to students for various applications in Remote-sensing (RS), GIS and related technology for precision agriculture.
+\end{alert}
+
+\textit{"It would be a simple matter to describe the earth's surface if it were the same everywhere. The environment, however, is not like that: there is almost endless variety."}
+
+\raggedleft --- Webster and Oliver (1990)
+
+<!-- ## -->
+
+<!-- \begin{flushright} -->
+<!-- \rightskip=1.8cm\textit{``Motivation isn't enough. If you've an idiot and you motivate him, now you've a motivated idiot.''} \\ -->
+<!-- \vspace{.2em} -->
+<!-- \rightskip=.8cm---New world humour -->
+<!-- \end{flushright} -->
+<!-- \vspace{1em} -->
+
+## Meaning and definition
+
+- Management of \alert{variability} in the dimensions of both space and time!
+- Any component of production agriculture -- plant genetic resource, production inputs, farm machinery, and farm operators -- are variable.
+- All of these can be included in the realm of precision agriculture, not only the soil.
+- Aspects include:
+  \begin{itemize}
+  \footnotesize
+  \item Variability of soil resource base
+  \item Weather
+  \item Plant genetics
+  \item Crop diversity
+  \item Machinery performance
+  \item Most physical, chemical and biological inputs used in the crop production (synthetic/natural)
+  \end{itemize}
+- By necessity, all are framed within the context of the variable socio-economic aspects of production agriculture.
+  \begin{itemize}
+  \footnotesize
+  \item to be successful on the farm, precision agriculture must fit the needs and capabilities of the farmer and must be profitable.
+  \end{itemize}
+
+##
+
+\begin{columns}[T, onlytextwidth]
+\column{0.6\textwidth}
+\begin{itemize}
+\small
+\item Managing soil and crops in space and time is the sustainable management principle for the 21st century, exemplified by:
+  \begin{itemize}
+  \footnotesize
+  \item Farming by soilscapes
+  \item Managing zones within the field
+  \item Managing the non-crop period
+  \end{itemize}
+\item Concerns of the technology:
+  \begin{itemize}
+  \footnotesize
+  \item assistive technologies enabling the efficient use
+  \item agronomic feasibility
+  \item environmental efficacy
+  \item performance with respect to economic and social impacts
+  \end{itemize}
+\end{itemize}
+
+\column{0.4\textwidth}
+
+```{r soilscape-uk, fig.cap="Georefrenced soilscapes map of UK. Source: \\url{http://www.landis.org.uk/soilscapes/}", out.width="98%", fig.align="center"}
+knitr::include_graphics("../images/soilscape_uk_2022-09-14 17-57-00.png")
+```
+\end{columns}
+
+\begin{block}{Known names of Precision agriculture}
+Farming by the foot, farming by soil, variable rate technology (VRT), spatially variable farming, prescription farming, site-specific crop production, site-specific management...
+\end{block}
+
+##
+
+\begin{block}{Stafford (1996)}
+"The targeting of inputs to arable crop production according to crop requirements on a localized basis"
+\end{block}
+
+- 4R principle:
+  - Right thing
+  - Right place
+  - Right time
+  - Right way
+
+\begin{block}{NRC, Board on Agriculture Committee, US}
+"A management strategy that uses information technologies to bring data from multiple sources to bear on decisions associated with crop production."
+\end{block}
+
+"Precision agriculture is the application of technologies and principles to manage spatial and temporal variability associated with all aspects of agricultural production for the purpose of improving crop performance and environmental quality."
+
+## Precision versus Accuracy
+
+```{r precision-vs-accuracy, out.width="36%", fig.cap="Precision verus accuracy. Something can be precise but not accurate."}
+knitr::include_graphics("../images/precision_vs_accuracy_bulls_eye_view.png")
+```
+
+\footnotesize
+- Nature of computers makes it easy to imply more *precision* than was possible in various aspects of data collection, analysis, computation in precision agriculture.
+- Precision refers to the limits on the measurement scale between which the true measurement is believed to lie, implied by the number of digits reported for a measurement.
+  - A pH of 5.4 or 5.44
+
+## The idea
+
+- Intuitively appealing
+  - scientific principles of management of soils, crops, and pests
+  - arguing against a management philosophy that aims at matching inputs to the exact needs everywhere is not easy.
+- Successful implementation of precision agriculture depends on numerous factors, including:
+  - the extent to which conditions within a field are known and manageable,
+  - the adequacy of input recommendations,
+  - the degree of application control,
+  - the degree of support through private and public infrastructures,
+  - the expectations of individual (how do you know maximum potential has been reached?)
+
+## Basic components
+
+- Measurement and understanding of variability
+- Use information to manage this variability by matching inputs to conditions within fields using \alert{site-specific management recommendation}
+- Mechanism to control the accuracy of site-specific inputs
+- Provide for the measurement and recording of the efficiency and efficacy of these site-specific practices in order to assess value on and off the farm.
+
+## Precision fertilizer management: An example use case
+
+- In conventional farming system, blanket application of high amounts of nitrogen fertilizer has been in practice.
+- Soil's nutrient mobility potential (due to soil physical and chemical properties), soil moisture, crop/variety specific demand and field micro-variations are unaccounted.
+  - N losess are due to $NO^{-}_3$ leaching and $NH^{+}_4$ volatilization
+  - Higer cost of production (added cost of input fertilizer purchase in order to compensate for loss)
+- Collecting in-season biomass sample for analysis is cost prohibitive, labor intensive and destructive.
+
+## Enabling technologies
+
+1. Computers
+2. Global positioning system (GPS)
+3. Geographic information system (GIS)
+4. Sensors
+5. Application control
+
+## Early history
+
+\begin{columns}[T, onlytextwidth]
+
+\column{0.75\textwidth}
+
+\begin{itemize}
+\small
+\item Pierre Robert is often regarded as the father of precision farming
+\item In 1982, Robert defended his PhD dissertation titled "Evaluation of some remote sensing techniques for soil and crop management"
+  \begin{itemize}
+  \footnotesize
+  \item Showed that color infrared (CIR) aerial photography could be used to detect "Problems relating to drainage, erosion, germination, grass and weed control, crop stand damage and machinery malfunction."
+  \item Suggested that CIR data could be used to build a "farm information and management system containing precisely located natural and cultural data to improve cost efficiency of future cultural practices. Such improvement could come, for example, from adjusting seed density, herbicide control or fertilization in response to detected field problems"
+  \end{itemize}
+\item Notes that anomalous reflectance patterns from row-cropped fields were associated with soil series boundaries
+\end{itemize}
+
+\column{0.25\textwidth}
+
+```{r pierre-robers-computerized-farming, fig.cap="Pierre Robert explaining his computerized farming by soil map database (circa 1985) to Jim Anderson at the University of Minnesota.", out.width="99%"}
+knitr::include_graphics("../images/pierre-robert-in-development.png")
+```
+
+\end{columns}
+
+# Tools of precision agriculture
+
+##
+
+- Soil sampling
+- Geostatistics and GIS
+- Farming by soil
+- Variable rate fertilizer
+- Site specific farming and management zones
+- GPS
+- Automated tractor navigation and robots
+- Yield mapping
+- Variable rate herbicide application
+- Variable rate irrigation
+- Remote sensing
+- Proximal sensing of soil and crops
+
+## Precision agriculture in Nepal
+
+- Attempt to land categorization using digital soil map
+- Micropropagation nurseries
+- Drip irrigation system
+- Use of cropping systems model of decision making
+- Use of laser land leveler
+- Rice planter
+- Drone sprayer
+
+##
+
+\begin{columns}[T, onlytextwidth]
+\column{0.5\textwidth}
+
+```{r drone-spraying-pesticides-pmamp, out.width="98%", fig.cap="PMAMP, Chitwan using drones in the rice field for pesticide spray. The introduced drone of given design cost around NRS 1,500,000. It sprays the pesticide or liquid fertilizer 20 times as efficiently (requires lesser spray volume) as traditional hand held sprayer."}
+knitr::include_graphics("../images/drone_pesticide_application.png")
+```
+
+\column{0.5\textwidth}
+
+```{r mechanical-rice-planter, out.width="98%", fig.cap="An agriculture engineer operating rice transplanter. The PMAMP, Chitwan is trialing with mechanical aids to paddy plantation, management and harvest. The instruments are a four-wheel-drive riding-type rice planter, a combined harvester and plastic trays. A rice planter machine shown allows farmers to sow six saplings at a time instead of one and decreases the labour by 40-50 percent. The saplings are treated and kept in a tray that then efficiently places them into the soil. The machine can cover one bigha (around 72,900 square feet) of land per hour."}
+knitr::include_graphics("../images/Mechanical-Transplanter-chitwan.jpg")
+```
+
+\end{columns}
+
+##
+
+\begin{columns}[T,onlytextwidth]
+\column{0.5\textwidth}
+
+```{r drum-seeder, fig.cap="Use of drum seeder in rice seeding (useful for DST). It has three drums for applying seeds and two hoppers for applying Granulated Urea, which were placed over a shaft.", out.width="70%"}
+knitr::include_graphics("../images/drum_seeder.png")
+```
+
+```{r drum-seeder-mechanism, out.width="60%", fig.align='center'}
+knitr::include_graphics("../images/drum_seeder_mechanism.png")
+```
+
+\column{0.5\textwidth}
+
+```{r seed-cum-ferti-till-drill, fig.cap="Seed cum ferti till drill", out.width="90%"}
+knitr::include_graphics("../images/seed_cum_ferti_tilll_drill.png")
+```
+
+\end{columns}
+
+##
+
+```{r laser-land-leveler, fig.cap="Laser guided drag bucket for land levelling. This ensures a flat table-top like land surface which increases water use efficiency as irrigated water reaches every part of the field with minimal run-off or water-logging. It reduces irrigation times in rice by 47-69 hours/hectare per season and in wheat by 10-12 hours/hectare per season. Increases yield by about 8 percent."}
+knitr::include_graphics("../images/Laser_land_leveller.jpg")
+```
+
+## Specific use cases in PA
+
+- Soil water monitoring/ Inefficient or broken drainage
+- Seed germination, plant density and crop growth rate,
+- Viral, microbial, fungal diseases and insects' pests diagnostics,
+- Weeds and other unwanted plant species monitoring,
+- Plant nutrient deficiency diagnostics and management,
+- Soil health and Soil-Microbes analysis,
+- Food nutrients composition and Phyto-chemicals analysis,
+- Weather forecast for cultivation
+- Calendar for agricultural crop cultivation
+
+## Limitations
+
+- Land come with fixed size
+- Despite all of these state of precision agriculture from a systems perspective is analogous to the early days of no-tillage crop production.
+- No perfect form of precision agricultural systems exist as of yet!
+- Only components of traditional crop management systems have been addressed separately regarding their potential for site-specific management, most notably soil fertility.
+- Management parameters that vary spatially, those with high temporal correlations (e.g., liming) will be more easily managed with precision agriculture than those with large temporal variance (e.g., mobile insects).
+
+# STCR approach for precision agriculture
+
+## Soil test crop response (STCR)
+
+\bcolumns
+\column{0.45\textwidth}
+\footnotesize
+- STCR is technique based on soil testing which aims to make quantitative fertilizer recommendation for the profit maximizing dose of fertilizer in the given parcel of land for a specific crop.
+- Testing generally involves analysis of chemical constitution as well as physical attributes of the soil with standardized protocols. Primarily, STCR study aim to:
+  \begin{itemize}
+  \footnotesize
+  \item Study the relationship between soil test values for available N, P, K and yield response to important crops.
+  \item Derive yield equations as function of fertilizer compositions for crops to make site specific recommendation.
+  \end{itemize}
+
+\column{0.55\textwidth}
+
+\begin{figure}
+  \begin{columns}[T,onlytextwidth]
+  \column{.7\linewidth}
+  \begin{center}
+  \includegraphics[width=0.85\linewidth]{../images/fertilizer_response_sub_saharan_africa.PNG}
+  \end{center}
+  \begin{center}
+  \includegraphics[width=0.65\linewidth]{../images/olsen_p_levels_yield_changes_winter_wheat_US.PNG}
+  \end{center}
+  \column{.3\linewidth}
+  \caption{\newline\tiny Fertilizer response (FR) as function of maize yield in the unfertilized control plots (a, b) or N application rate (c, d) for Sub-Saharan Africa (a, c) and Kenya (b, d). Dashed lines represent no fertilizer response to the fertilizer (FR = 1). The solid lines describe non-linear relationship function as: FR = $\mathrm{32,244 (control~yield)^{-0.7}}$ with significant associations for Kenya and FR = $\mathrm{83 (control~yield)^{-0.5}}$ with significant associations for Sub-Saharan Africa; Source: \cite{ichami2019fertilizer}}
+  \label{fig:yield-response-n-sahara}
+  
+  \end{columns}
+\end{figure}
+\ecolumns
+
+<!-- Small grain producers often have difficulty interpreting Olsen P soil tests in Central and Northcentral Montana. This study was conducted to evaluate the Olsen P soil test and P response relationships for winter wheat grown on fallow. Treatments of 0, 5, 10, 15, 20, and 25 kg P/ha were applied at 19 locations from 1987 to 1989. Grain yield, protein content, and test weight were measured. Olsen P soil tests ranged from 11 to 35 mg/kg with a mean of 22 mg/kg while pH varied from 5.4 to 8.4 with a mean of 7.4. Grain yield response to applied P ranged from 0 to 1000 kg/ha. A P soil test critical level of 24 mg/kg for P response was determined using the Cate-Nelson graphical method. Linear multiple regression analysis indicated that grain yield response was positively correlated with P rate and soil test x pH and negatively correlated with soil test, pH, and P rate x soil test with an R2 of 0.42 (P = 0.001). Grain protein and test weight were not influenced by P applications. -->
+
+##
+
+\small
+- Soil mapping has been widely used to develop statistical models of the relationships between environmental variables and soil attributes.
+- Obvious applications of soil mapping include:
+  \begin{itemize}
+  \footnotesize
+  \item determining and mapping the spatial distribution of the variability in soil chemical properties of the agricultural lands
+  \item develop soil test based fertilizer prescription under Integrated Plant Nutrition System (STCR-IPNS) for various crops and soils
+  \item evaluate the extent to which fertilizer needs of crops can be reduced with the conjoint use of organic manures
+  \item evaluation of various soil test methods for their suitability under field conditions
+  \end{itemize}
+- Field level soil sampling and testing services (as campaigns and routine tests) in Nepal are offered by
+  \begin{itemize}
+  \footnotesize
+  \item Government organizations (Central Soil Testing Laboratory, Provincial Soil Testing Laboratory, Municipal level soil testing laboratories, National Soil Research Center (NSSRC)-NARC, University Departments (Central Department of Geology))
+  \item Non-government Organizations
+  \item Private laboratories
+  \end{itemize}
+
+## Digital soil map (of Nepal)
+
+```{r digital-soil-map-nepal, fig.cap="Digital soil map of Nepal, showing soil attributes for selected region (South-eastern part of Kailali district). NARC's National Soil Science Research Center (NSSRC) in partnership with USAID's Nepal Seed and Fertilizer (NSAF) project developed the web based application.", out.width="80%"}
+knitr::include_graphics("../images/digital_soil_map_nepal_narc.PNG")
+```
+
+##
+
+\small
+- Digital Soil Map (DSM) is a computer-assisted production of digital maps of soil properties. This is developed by using mathematical and statistical models that combine soil information from laboratory analysis with environmental variables (soil forming factors).
+- Soil mapping is assisted for realistic appraisal of environmental factors (allowing for adjustment) that affect soil properties.
+  - Covariate layers are generated using satellite images (raster data)
+  - Important factors are topographic data, vegetation, precipitation, temperature, soil parent material, land cover type, landform classes.
+- DSM uses advanced computational algorithms that use both soil sample data and environmental variables to generate maps. It does not only use spatial autocorrelation as the means to interpolate the data, but also considers soil forming factors. Also, the process can be automated so that newer versions of the map can be developed faster once new soil samples are collected. As soil properties are combined with environmental variables, a smaller number of soil samples would be enough to generate DSM compared to conventional soil map.
+
+##
+
+\footnotesize
+- Recently 'Digital Soil Map Management Guidelines, 2078' has been implemented.
+- Digital soil map for Nepal provides access to location-specific information on soil properties for any province, district, municipality or a particular area of interest. The interactive map provides information that will be useful to make new crop-and site-specific fertilizer recommendations for the country.
+  \begin{itemize}
+  \footnotesize
+  \item Soil map: \url{https://soil.narc.gov.np/soil/soilmap/}
+  \item Crop map: \url{https://soil.narc.gov.np/crop/cropmap/}
+  \end{itemize}
+- Spatial resolution of the maps is 250 m.
+- Prepared using soil information from 23,273 soil samples collected from the National Land Use Project, Central Agricultural Laboratory and Nepal Agricultural Research Council. The samples were collected from 56 districts covering seven provinces. These soil properties were combined with environmental covariates (soil forming factors) derived from satellite data and spatial predictions of soil properties were generated using advanced machine learning tools and methods.
+- Help to increase crop yields and also the nutritional value of these crops
+
+
+# Common issues of precision agriculture for Nepal
+
+##
+
+\begin{columns}[T, onlytextwidth]
+\column{0.5\textwidth}
+
+\begin{itemize}
+\item Farmers commonly split large, undulating crop fields, even those at similar elevation range or contour, into a
+patchwork of small sub-plots in plane areas of Nepal.
+\item Use of hotbeds, coldframes, shade house in horticulture.
+\item Drone assisted diagnostics and prescription agriculture (DADAPA)
+\item Cloud marketing system (CMS)
+\end{itemize}
+
+\column{0.5\textwidth}
+
+```{r, out.width="90%"}
+knitr::include_graphics("../images/irrigating_farmer.png")
+```
+
+\end{columns}
+
+## Issues with precision agriculture in Nepal
+
+- Implementation of PA is fundamentally different for developed and developing country.
+- Average land holding in Nepal is <0.6 ha per household.
+- More than 80% of the farmers are smallholder and are practicing subsistence farming.
+- Modern form of precision farming hinges on skilled human resources for its adoption 
+  - knowledge about IoT and IT technologies
+  - use of recent innovations and research
+- Lays emphasis on extensive mechanization
+- Adds to the cost of smallholder
+- Financial support systems are underdeveloped
+- Slower adoption rate (social structure); besides being technology averse, smallholders may often hinder the progress of expansion of technology
+- Existing infrastructure bottleneck
+  - irrigation
+  - roadways
+
+## Possible solutions
+
+- professional human resource development;
+- policy initiated and/or supported investments into infrastructure;
+- affordable handsets and reduced device costs;
+- available and affordable access to Internet for the farmers funded by different institutions (public or donor financed);
+- solutions between low- and high-level services (e.g. between SMS and 4 or 5G networks).
+- development and open publication of site specific soil maps, supported by public institution.
+
+# Bibliography
+
+## References
+
+<!-- (Advances in agronomy, vol 67) -->
+<!-- https://youtu.be/HYozoSHt4T0 -->

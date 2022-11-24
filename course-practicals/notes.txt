@@ -1,0 +1,9 @@
+1. Download and install QGIS Link:
+
+https://qgis.org/downloads/QGIS-OSGeo4W-3.22.12-1.msi
+
+2. Download contents of google drive folders and files into your computer. Link:
+
+https://drive.google.com/drive/folders/1os8AgDZ9V6IL3f0u5GqOuS-1V3NnPn2z?usp=share_link
+
+3. Install image editing software -- Adobe photoshop

@@ -104,16 +104,22 @@ photo interpretation of aerial photographs
 
 ##
 
-```{r conceptual-framework-geoinformatics, fig.align="center", fig.cap="Conceptual framework for wide applications of geo-informatics", out.width="65%"}
+```{r conceptual-framework-geoinformatics, fig.align="center", fig.cap="Conceptual framework for wide applications of geo-informatics", out.width="55%"}
 knitr::include_graphics("../images/framework_geoinformatics.png")
 ```
 
+## Remote sensing and GIS
+
+```{r remote-sensing-gis, fig.cap="An integrated framework for remote sensing and GIS.", out.width="88%"}
+knitr::include_graphics("../images/remote-sensing-of-electromagnetic-radiation-earth.PNG")
+```
 
 ## Applications
 
 \begin{columns}[T, onlytextwidth]
 \column{0.5\textwidth}
 \begin{itemize}
+\small
 \item Urban planning and land use management,
 \item in-car navigation systems,
 \item virtual globes,
@@ -126,6 +132,7 @@ knitr::include_graphics("../images/framework_geoinformatics.png")
 \end{itemize}
 \column{0.5\textwidth}
 \begin{itemize}
+\small
 \item meteorology and climate change,
 \item oceanography and atmosphere modeling,
 \item business location planning,
@@ -151,15 +158,33 @@ knitr::include_graphics("../images/framework_geoinformatics.png")
 
 ## Cartography
 
+\bcolumns
+\column{0.7\textwidth}
+\small
 - Study and practice of making and using maps. Combining science and aesthetics and technique, cartography builds on the premise that reality can be modeled in ways that communicate spatial information effectively.
-- Coordinate reference system defines how the visual mapping of spatial data should be done
-  - CRS has projection parameters, which is configurable giving a variation in mapping \footnote[frame]{\url{https://proj.org/usage/projections.html}}. 
+\footnote[frame]{\url{https://proj.org/usage/projections.html}}. 
 - Objectives of traditional cartography:
   - Set the map agenda and select traits (roads, land masses, political boundaries) of the object to be mapped.
   - Represent the terrain of the mapped object on flat media (projection)
   - Reduce the complexity (generalization).
   - Organize the elements of the map to best convey its message (map design)
+
+\column{0.3\textwidth}
+
+**Design matters!**
+
+```{r design-matters-cartography, out.width="98%"}
+knitr::include_graphics("../images/you-will-always-be-mine-psychology.jpg")
+```
+
+\ecolumns
+
+##
+
+- Coordinate reference system defines how the visual mapping of spatial data should be done
+  - CRS has projection parameters, which is configurable giving a variation in mapping
 - Modern cartography constitutes theoretical and practical foundations of GIS and Geographic information science\footnote[frame]{Overview of CRS (in R) is available at: \url{https://www.nceas.ucsb.edu/sites/default/files/2020-04/OverviewCoordinateReferenceSystems.pdf}}.
+- EPSG Geodetic Parameter Dataset (also EPSG registry) is a public registry of geodetic datums, spatial reference systems, Earth ellipsoids, coordinate transformations and related units of measurement. Originally created by European Petroleum Survey Group (EPSG). Each entity is assigned an EPSG code between 1024-32767, along with a standard machine-readable well-known text (WKT) representation. 
 
 ## Map types
 
@@ -220,7 +245,7 @@ ggplot(data = tibble(long = m_world$x, lat = m_world$y),
 \column{0.4\textwidth}
 
 ```{r nepal-sf-dataframe, out.width="98%", fig.width=4, fig.height=3}
-np_dist <- sf::st_read("../data/npl_admin2_poly_sd_171123/NPL_Adm2_poly_sd_171123.shp", quiet = TRUE) %>%
+np_dist <- sf::st_read("../data/npl_districts/NPL_districts_poly_sd_171123.shp", quiet = TRUE) %>%
   mutate(DISTRICT = fct_recode(DISTRICT, "CHITWAN" = "CHITAWAN"))
 
 # np_dist %>% 
@@ -247,11 +272,11 @@ ggplot() +
 
 ## Thematic cartography
 
-```{r nepal-sf-dataframe-thematic, out.width="66%", fig.width=7, fig.height=5, fig.align='center'}
+```{r nepal-sf-dataframe-thematic, out.width="62%", fig.width=6.5, fig.height=5, fig.align='center'}
 ## Plotting districtwise rice production profile
-dist_wise_rice <- readxl::read_xlsx("../data/npl_maize_districts_0506-1516.xlsx", sheet = "production", skip = 1)
+dist_wise_maize <- readxl::read_xlsx("../data/npl_maize_districts_0506-1516.xlsx", sheet = "area", skip = 1)
 
-dist_wise_rice <- dist_wise_rice %>% 
+dist_wise_maize <- dist_wise_maize %>% 
   mutate(District = str_to_upper(District)) %>% 
   mutate(District = str_replace_all(District,
                                     pattern = c("KAVREPALANCHOK" = "KABHREPALANCHOK", 
@@ -259,10 +284,10 @@ dist_wise_rice <- dist_wise_rice %>%
                                                 "KAPILVASTU" = "KAPILBASTU"))) %>% 
   rename(DISTRICT = District)
 
-np_dist <- left_join(np_dist, dist_wise_rice, by = "DISTRICT") %>% 
+np_dist <- left_join(np_dist, dist_wise_maize, by = "DISTRICT") %>% 
   rename(Year201516 = `2015/16`)
 
-rice_production_1516 <- ggplot() +
+maize_area_1516 <- ggplot() +
   geom_sf(data = st_geometry(np_dist), aes(fill = np_dist$Year201516), lwd = 0.3, color = "black") + 
   ggrepel::geom_label_repel(data = (np_dist %>% top_n(10, wt = Year201516) %>% arrange(desc(Year201516))) %>% 
                               mutate(lon=map_dbl(.$geometry, ~st_centroid(.x)[[1]]), # add centroid values for labels
@@ -273,20 +298,20 @@ rice_production_1516 <- ggplot() +
                                                             st_set_geometry(NULL) %>%
                                                             top_n(10, wt = Year201516) %>%
                                                             arrange(desc(Year201516)) %>%
-                                                            dplyr::select(DISTRICT, "Production (Ton)"= Year201516)),
+                                                            dplyr::select(DISTRICT, "Area (ha)"= Year201516)),
            vjust = 1, hjust = 0, size = 1.4) +
   scale_y_continuous() +
-  scale_fill_gradient(name = "Production in Tons", guide = "colourbar", low = "#132BCC", high = "#CC2B20") +
+  scale_fill_gradient(name = "Area in hectares", guide = "colourbar", low = "#132BCC", high = "#CC2B20") +
   # guides(fill=FALSE) + # remove legend
   xlab(NULL) + ylab(NULL) +
   theme_minimal() + 
-  ggtitle("Estimated districtwise production of rice grain in Nepal, \nfeaturing top 10 districts during\nYear: 2015/16\n(Source: Statistical Year Book, 2017)") +
+  ggtitle("Estimated districtwise area of production of Maize grain in Nepal, \nfeaturing top 10 districts during\nYear: 2015/16\n(Source: Statistical Year Book, 2017)") +
   theme(panel.grid.major = element_line(colour = "turquoise"), 
         legend.position = "bottom", 
         text = element_text(size = 8),
         legend.text = element_text(angle = 45), legend.text.align = +1) # change the grid (graticule) color
 
-rice_production_1516
+maize_area_1516
 ```
 
 ## Projections
@@ -332,78 +357,180 @@ read_csv("../data/projections_proj.csv", col_names = FALSE, skip = 2, show_col_t
   .[7:16, ] %>% 
   knitr::kable(booktabs = TRUE, col.names = rep("Projection", times = 10), format = "latex") %>%
   kableExtra::kable_styling(font_size = 4, position = "center") %>%
-  kableExtra::column_spec(column = 1:10, width = rep("8em", 10))
+  kableExtra::column_spec(column = 1:10, width = rep("9em", 10))
 ```
 
 ##
 
 \footnotesize
+- Projections are generally given a name so that they can be easily identified and referenced on a map.
+  \begin{itemize}
+  \footnotesize
+  \item named after the person(s) who invented them (eg Mercator); or aspects of the projection (eg Equidistant Conic); or a combination of the two (eg Lambert Conformal Conic).
+  \end{itemize}
+- All projections result in some distortion of the relationships between features on the sphere when they are projected onto a flat surface. These distortions include:
+  \begin{itemize}
+  \footnotesize
+  \item direction between a feature and surrounding features
+  \item distance between a feature and surrounding features
+  \item shape of any feature
+  \item size of any feature
+  \end{itemize}
+- Only 'projection' which has all the features without distortion in a globe.
+- This problem is in part due to the changing relationship between latitude and longitude.
+  \begin{itemize}
+  \footnotesize
+  \item Near the Equator a 'block' of $1^\circ \times 1^\circ$ latitude and longitude is almost a square, while the same 'block' near the poles is almost a triangle.
+  \end{itemize}
+- Technical terms used to describe the line of latitude or longitude where this imaginary 'piece of paper' touches the Earth are:
+  \begin{itemize}
+  \footnotesize
+  \item latitude – standard parallel
+  \item longitude – central meridian
+  \end{itemize}
 
-EPSG codes for commonly used CRS (in the U.S.)
+## Basic Projection Types
 
-1. Latitude/Longitude
+<!-- https://www.icsm.gov.au/education/fundamentals-mapping/projections/commonly-used-map-projections -->
+
+- This describes how a map shows the positional relationship between two features, and their size and shape.
+- Depending on their intended use, projections are chosen to preserve a particular relationship or characteristic. These include:
+  - Equal-Area: correctly shows the size of a feature
+  - Conformal: correctly shows the shape of features (A map can not be both equal-area or conformal -- it can only be one; or the other; or neither.)
+  - Equidistant: correctly shows the distance between two features
+  - True Direction: correctly shows the direction between two features
+
+## Basic Projection Techniques
+
+\bcolumns
+\small
+\column{0.55\textwidth}
+- For an imaginary 'piece of paper' touching the Earth, there are 3 basic techniques used to create a projection and therefore a map. These are:
+  \begin{itemize}
+  \footnotesize
+  \item azimuthal: the imaginary 'piece of paper' is flat, this is usually used over Polar areas
+  \item conical: the imaginary 'piece of paper' is rolled into a cone, this is usually used in mid-latitude areas (approximately $20^\circ - 60^\circ$ North and South)
+  \item cylindrical: the imaginary 'piece of paper' is rolled into a cylinder, this is usually used over Equatorial areas or for World Maps
+  \end{itemize}
+- Each of the basic techniques have different distortions and therefore limitations to their use.
+
+\column{0.45\textwidth}
+
+```{r azimuthal-projection, fig.cap="Azimuth is a mathematical concept with relates to the relationship between a point and the 'flat piece of paper' that 'touches' the Earth. Maps produced using Azimuthal Projections (often called polar projections) techniques have lines of longitude fanning out from the centre and lines of latitude as concentric circles. It is usually measured as an angle. The projection have distortions increasing away from the central point.", out.width="98%"}
+knitr::include_graphics("../images/Antarctica comp_1.jpg")
+```
+
+\ecolumns
+
+##
+
+\bcolumns
+\column{0.5\textwidth}
+
+```{r conic-projection, fig.cap="This map is centred on central Australia and the Standard Parallel is $25^\\circ$ South. Note how the shapes of land masses near the Standard Parallel are fairly close to the true shape when viewed from space. This includes Australia, South America and the 'tip' of Africa. Also note how land masses furthest away from the Standard Parallel are very distorted when compared to the views from space. Particularly note how massively large northern Canada and the Arctic icecaps look.", out.width="55%"}
+knitr::include_graphics("../images/conic-world.png")
+```
+
+```{r, out.width="28%", fig.align='center'}
+knitr::include_graphics("../images/conic_projection_cap.jpg")
+```
+
+\column{0.5\textwidth}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=0.7\linewidth]{../images/cylindrical_projection.png}
+  \end{center}
+  \begin{columns}[T,onlytextwidth]
+  \column{.45\linewidth}
+  \begin{center}
+  \includegraphics[width=0.65\linewidth]{../images/cylindrical_projection_cap.jpg}
+  \end{center}
+  \column{.55\linewidth}
+  \caption{\newline\tiny This follows the concept of a 'piece of paper' being rolled into a cylinder and touching the Earth on a circular line. Notice the huge distortions in the Arctic and Antarctic regions, but the reasonable representation of landmasses out to about 50° north and south. Projection information: Mercator; centred on 140° East and the Standard Parallel is the Equator}
+  \label{fig:cylinder-project}
+  
+  \end{columns}
+\end{figure}
+
+\ecolumns
+
+## Mercator projection
+
+\small
+- Standard map projection for nautical purposes because of its ability to represent lines of constant true direction.
+- The cylinder is usually positioned over the Equator, but this is not essential (but always has the Equator as its Standard Parallel).
+- Its construction is such that the lines of longitude and latitude are at right angles to each other - this means that a world map is always a rectangle.
+- The lines of longitude are evenly spaced apart. But the distance between the lines of latitude increase away from the Equator. 
+<!-- - This relationship is what allows the direction between any two points on the map to be constant true direction. -->
+<!-- - While this relationship between lines of lines of latitude and longitude correctly maintains direction, it allows for distortion to occur to areas, shapes and distances. Nearest the Equator there is little distortion. Distances along the Equator are always correct, but nowhere else on the map. Between about $15^\circ$ north and south the areas and shapes are well preserved. Further out (to about $50^\circ$ north and south) the areas and shapes are reasonably well preserved. This is why, for uses other than marine navigation, the Mercator projection is recommended for use in the Equatorial region only. -->
+- Despite some distortions the Mercator projection is generally regarded as being a conformal projection. This is because within small areas shapes are essentially true.
+- Tiles from Google Maps, Open Street Maps, Stamen map are projected in Mercator (assigned EPSG code: 3857)
+
+## Universal Traverse Mercator (UTM) projection
+
+\footnotesize
+
+- UTM coordinate comprises a zone number, a hemisphere (N/S), an easting and a northing. Eastings are referenced from the central meridian of each zone, & northings from the equator, both in metres. To avoid negative numbers, 'false eastings' and 'false northings' are used:
+- Eastings are measured from 500,000 metres west of the central meridian. Eastings (at the equator) range from 166,021m to 833,978m (the range decreases moving away from the equator); a point on the the central meridian has the value 500,000m.
+- In the northern hemisphere, northings are measured from the equator - ranging from 0 at the equator to 9,329,005m at 84 degree N). In the southern hemisphere they are measured from 10,000,000 metres south of the equator (close to the pole) - ranging from 1,116,915m at 80 degree S to 10,000,000m at the equator.
+- Nepal lies in the UTM zone of 440N and 450N. The scale factor is 0.9996 for the central meridian. 10 49’ east or west of central meridian has the scale factor of 1.
+
+\scriptsize
+- Norway/Svalbard: the designers of UTM made two exceptions to the rule. The part of zone 31 covering western Norway is transferred to zone 32, and the zones covering Svalbard are tweaked to keep Svalbard in two zones (it's easier to understand looking at a map). These widened zones are viable partly because zones are much narrower so far north, so little precision is lost in merging them.
+
+<!-- ## -->
+
+<!-- \begin{columns}[T, onlytextwidth] -->
+<!-- \column{0.3\textwidth} -->
+
+<!-- ```{r utm-projection-geometry, out.width="99%"} -->
+<!-- knitr::include_graphics("../images/UTM_projection.jpg") -->
+<!-- ``` -->
+
+<!-- \column{0.7\textwidth} -->
+
+<!-- \begin{itemize} -->
+<!-- \scriptsize -->
+<!-- \item Traditionally Universal Transverse Mercator (UTM) Projection system has been in use in Nepal; Mercator projection is Conformal Cylindrical Projection. -->
+<!-- \item In Transverse projection, Earth is wrapped around a cylinder in such a manner that point of tangency between Globe and Cylinder is a meridian, or line of longitude, called Central Meridian. In Conformal or Orthomorphic Projection, the shape/angle is preserved even though the length and breadth may distort. -->
+<!-- \item UTM consists total of 60 zones of longitude each of 60 extending from 180 W to 180 E. 180 W to 174 W is designated as zone 1 with the central meridian of 177 W and other zone goes as so on and so further manner. Further zone are divided in rows with a difference of 8. These zone extend from 80 S Latitude to 84 N latitude. The first Latitude zone is designated with letter C for 80 S to 72 S latitude. -->
+<!-- \item In recent years with cadastral survey and various accuracy techniques, Nepal has default projection set to MUTM (Modified UTM) -- a Gauss-Krueger projection-based coordinate system. In this system, earth is divided in 120 zones each of 3 degree. -->
+<!-- \item Nepal has central meridian of 81 degree, 84 degree and 87 degree. -->
+<!-- \item Scale factor of 0.9999 is used for central meridian normally for 84 degree and 0 degree 55 minutes east or west of central meridian has the scale factor of 1 (meaning no distortion). -->
+<!-- \item False Easting at central meridian is 500,000 m in order to keep all the coordinates within the country positive, and False Northing at the Equator is 0 m. -->
+<!-- \end{itemize} -->
+<!-- \end{columns} -->
+
+## Coordinate reference system (CRS)
+
+\bcolumns
+\column{0.5\textwidth}
+\footnotesize
+- Latitude/Longitude
   \begin{itemize}
   \scriptsize
   \item WGS84 (EPSG: 4326)
   \item Commonly used by organizations that provide GIS data for the entire globe or many countries. CRS used by Google Earth
   \end{itemize}
-2. NAD83 (EPSG:4269)
+- NAD83 (EPSG:4269)
   \begin{itemize}
   \scriptsize
   \item Most commonly used by U.S. federal agencies.
   \end{itemize}
-3. NAD27 (EPSG: 4267)
+- NAD27 (EPSG: 4267)
   \begin{itemize}
   \scriptsize
   \item Old version of NAD83
   \end{itemize}
-4. Projected (Easting/Northing)
+- Projected (Easting/Northing)
   \begin{itemize}
   \scriptsize
   \item UTM, Zone 10 (EPSG: 32610)
   \item Zone 10 is used in the Pacific Northwest
   \end{itemize}
-5. Mercator (EPSG: 3857); Tiles from Google Maps, Open Street Maps, Stamen map
 
-## Universal Transverse Mercator
-
-\footnotesize
-
-UTM coordinate comprises a zone number, a hemisphere (N/S), an easting and a northing. Eastings are referenced from the central meridian of each zone, & northings from the equator, both in metres. To avoid negative numbers, 'false eastings' and 'false northings' are used:
-
-Eastings are measured from 500,000 metres west of the central meridian. Eastings (at the equator) range from 166,021m to 833,978m (the range decreases moving away from the equator); a point on the the central meridian has the value 500,000m.
-
-In the northern hemisphere, northings are measured from the equator - ranging from 0 at the equator to 9,329,005m at 84 degree N). In the southern hemisphere they are measured from 10,000,000 metres south of the equator (close to the pole) - ranging from 1,116,915m at 80 degree S to 10,000,000m at the equator.
-
-Nepal lies in the UTM zone of 440N and 450N. The scale factor is 0.9996 for the central meridian. 10 49’ east or west of central meridian has the scale factor of 1.
-
-\scriptsize
-Norway/Svalbard: the designers of UTM made two exceptions to the rule. The part of zone 31 covering western Norway is transferred to zone 32, and the zones covering Svalbard are tweaked to keep Svalbard in two zones (it's easier to understand looking at a map). These widened zones are viable partly because zones are much narrower so far north, so little precision is lost in merging them.
-
-##
-
-\begin{columns}[T, onlytextwidth]
-\column{0.3\textwidth}
-
-```{r utm-projection-geometry, out.width="99%"}
-knitr::include_graphics("../images/UTM_projection.jpg")
-```
-
-\column{0.7\textwidth}
-
-\begin{itemize}
-\scriptsize
-\item Traditionally Universal Transverse Mercator (UTM) Projection system has been in use in Nepal; Mercator projection is Conformal Cylindrical Projection.
-\item In Transverse projection, Earth is wrapped around a cylinder in such a manner that point of tangency between Globe and Cylinder is a meridian, or line of longitude, called Central Meridian. In Conformal or Orthomorphic Projection, the shape/angle is preserved even though the length and breadth may distort.
-\item UTM consists total of 60 zones of longitude each of 60 extending from 180 W to 180 E. 180 W to 174 W is designated as zone 1 with the central meridian of 177 W and other zone goes as so on and so further manner. Further zone are divided in rows with a difference of 8. These zone extend from 80 S Latitude to 84 N latitude. The first Latitude zone is designated with letter C for 80 S to 72 S latitude.
-\item In recent years with cadastral survey and various accuracy techniques, Nepal has default projection set to MUTM (Modified UTM) -- a Gauss-Krueger projection-based coordinate system. In this system, earth is divided in 120 zones each of 3 degree.
-\item Nepal has central meridian of 81 degree, 84 degree and 87 degree.
-\item Scale factor of 0.9999 is used for central meridian normally for 84 degree and 0 degree 55 minutes east or west of central meridian has the scale factor of 1 (meaning no distortion).
-\item False Easting at central meridian is 500,000 m in order to keep all the coordinates within the country positive, and False Northing at the Equator is 0 m.
-\end{itemize}
-\end{columns}
-
-##
+\column{0.5\textwidth}
 
 ```{r raster-vector-crs-verbatim1, warning=FALSE, message=FALSE, size = "tiny"}
 # Coordinate systems in R (https://mgimond.github.io/Spatial/coordinate-systems-in-r.html)
@@ -442,79 +569,35 @@ crs(elev.r)
 # The PROJ4 syntax consists of a list of parameters, each prefixed with the + character. For example, elev.r's CS is in a UTM projection (+proj=utm) for zone 19 (+zone=19) and in an NAD 1983 datum (+datum=NAD83).
 ```
 
-##
+\ecolumns
 
-\begin{columns}
-\column{0.5\textwidth}
+<!-- ## -->
 
-```{r map-projection-mercator, out.width="95%", fig.width=4, fig.height=3}
-# require(ggfortify)
-# require(ggpmisc)
+<!-- ```{r map-projection-mercator, out.width="95%", fig.width=4, fig.height=3} -->
+<!-- # require(ggfortify) -->
+<!-- # require(ggpmisc) -->
+<!-- # simple_features_object %>% -->
+<!-- #   st_set_crs("+proj=utm +zone=19 +ellps=GRS80 +datum=NAD83") -->
 
-ggplot() +
-  geom_sf(data = st_geometry(np_dist), lwd = 0.3, color = "black") +
-  labs(title = "Mercator projection") +
-  theme_minimal()
+<!-- # # plot map of nepal in mercator -->
+<!-- # ggplot() + -->
+<!-- #   geom_sf(data = st_geometry(np_dist), lwd = 0.3, color = "black") + -->
+<!-- #   labs(title = "Mercator projection") + -->
+<!-- #   theme_minimal() -->
 
-# s.sf %>%
-#   st_set_crs("+proj=utm +zone=19 +ellps=GRS80 +datum=NAD83")
-```
+<!-- # np_dist_utm_proj <- st_set_crs(np_dist, 26919) # UTM NAD83 Zone 19N EPSG code equivalent is 26919. -->
 
-\column{0.5\textwidth}
+<!-- # # Azimuthal equidistant projection centered on Maine, USA (69.8degree West, 44.5degree North) -->
+<!-- # st_transform(np_dist, "+proj=aeqd +lat_0=44.5 +lon_0=-69.8 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs") -->
 
-```{r map-projection-utm, out.width="95%", fig.width=4, fig.height=3}
-np_dist_utm_proj <- st_set_crs(np_dist, 26919) # UTM NAD83 Zone 19N EPSG code equivalent is 26919.
+<!-- # # World Robinson projection -->
+<!-- # st_transform(np_dist,"+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs") -->
 
-ggplot() +
-  geom_sf(data = st_geometry(np_dist_utm_proj), lwd = 0.3, color = "black") +
-  labs(title = "UTM projection") +
-  theme_minimal() 
+<!-- # # World sinusoidal projection -->
+<!-- # st_transform(np_dist,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs") -->
 
-# # Azimuthal equidistant projection centered on Maine, USA (69.8degree West, 44.5degree North)
-# st_transform(np_dist, "+proj=aeqd +lat_0=44.5 +lon_0=-69.8 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+<!-- ``` -->
 
-# # World Robinson projection
-# st_transform(np_dist,"+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-
-# # World sinusoidal projection
-# st_transform(np_dist,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-```
-
-\end{columns}
-
-##
-
-\begin{columns}
-\column{0.5\textwidth}
-
-```{r map-projection-azimuthal, out.width="95%", fig.width=4, fig.height=3}
-
-np_azimuthal_proj <- np_dist %>%
-  st_transform("+proj=aeqd +lat_0=28 +lon_0=84 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-
-ggplot() +
-  geom_sf(data = st_geometry(np_azimuthal_proj), lwd = 0.3, color = "black") +
-  labs(title = "Azimuthal equidistant projection centered \non 28 degree N latitude and 84 degree E longitude") +
-  theme_minimal() +
-  theme(title = element_text(size = 8))
-
-# s.sf %>%
-#   st_set_crs("+proj=utm +zone=19 +ellps=GRS80 +datum=NAD83")
-```
-
-\column{0.5\textwidth}
-
-```{r map-projection-robinson, out.width="95%", fig.width=4, fig.height=3}
-np_dist_robinson_proj <- np_dist %>% 
-  st_transform("+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-
-ggplot() +
-  geom_sf(data = st_geometry(np_dist_robinson_proj), lwd = 0.3, color = "black") +
-  labs(title = "Robinson projection") +
-  theme_minimal() 
-```
-
-\end{columns}
 
 ## Use in precision agriculture
 

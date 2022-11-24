@@ -39,13 +39,11 @@
 % Title page
 \setbeamertemplate{title page}
 {\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{sissooleafwaterdrops.jpg}
-% \begin{textblock}{7.5}(1,2.8)\usebeamerfont{title} % original
-\begin{textblock}{15}(1,2.2)\usebeamerfont{title}
+\begin{textblock}{7.5}(1,2.8)\usebeamerfont{title}
 {\color{white}\raggedright\par\inserttitle}
 \end{textblock}
-\begin{textblock}{10}(1,6)
-\small
-{\color{white}\raggedright{\insertauthor}\mbox{}\\[0.1cm]
+\begin{textblock}{7.5}(1,7)
+{\color{white}\raggedright{\insertauthor}\mbox{}\\[0.2cm]
 \insertdate}
 \end{textblock}}
 
@@ -130,6 +128,7 @@
 \fi
 %%
 
+
   \usepackage{setspace}
   \usepackage{wasysym}
   % \usepackage{footnote} % don't use this this breaks all
@@ -162,12 +161,23 @@
   \definecolor{skyblued}{rgb}{0.65, 0.6, 0.94}
   \definecolor{oranged}{RGB}{245, 145, 200}
 
-  \newlength{\cslhangindent}
-  \setlength{\cslhangindent}{1.5em}
-  \newenvironment{cslreferences}%
-    {\setlength{\parindent}{0pt}%
-    \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces}%
-    {\par}
+  % \newlength{\cslhangindent}
+  % \setlength{\cslhangindent}{1.5em}
+  % \newenvironment{cslreferences}%
+  %   {\setlength{\parindent}{0pt}%
+  %   \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces}%
+  %   {\par}
+
+
+  \newcommand{\bcolumns}{\begin{columns}[T, onlytextwidth]}
+  \newcommand{\ecolumns}{\end{columns}}
+
+  \newcommand{\bdescription}{\begin{description}}
+  \newcommand{\edescription}{\end{description}}
+
+  \newcommand{\bitemize}{\begin{itemize}}
+  \newcommand{\eitemize}{\end{itemize}}
+  \AtBeginSubsection{}
 
   \title[]{Geoinformatics: definition, concepts, tools and techniques
 and issues in Nepalease agriculture}
@@ -309,7 +319,7 @@ Assistant Professor\\
 \protect\hypertarget{section-1}{}
 \begin{figure}
 
-{\centering \includegraphics[width=0.65\linewidth]{../images/framework_geoinformatics} 
+{\centering \includegraphics[width=0.55\linewidth]{../images/framework_geoinformatics} 
 
 }
 
@@ -322,6 +332,7 @@ Assistant Professor\\
 \begin{columns}[T, onlytextwidth]
 \column{0.5\textwidth}
 \begin{itemize}
+\small
 \item Urban planning and land use management,
 \item in-car navigation systems,
 \item virtual globes,
@@ -334,6 +345,7 @@ Assistant Professor\\
 \end{itemize}
 \column{0.5\textwidth}
 \begin{itemize}
+\small
 \item meteorology and climate change,
 \item oceanography and atmosphere modeling,
 \item business location planning,
@@ -346,11 +358,45 @@ Assistant Professor\\
 \end{columns}
 \end{frame}
 
+\begin{frame}{}
+\protect\hypertarget{section-2}{}
+\begin{itemize}
+\tightlist
+\item
+  agro-ecological zonation;
+\item
+  quantitative assessment of soil carbon dynamics and land productivity;
+\item
+  soil erosion inventory;
+\item
+  integrated agricultural drought assessment and management.
+\item
+  cropping system analysis
+
+  \begin{itemize}
+  \tightlist
+  \item
+    information on existing cropping systems in a region with respect to
+    areal extent of crops,
+  \item
+    crop vigors/ yield and yearly crop rotation / sequence practices is
+    important for finding out agricultural areas with low to medium crop
+    productivity where sustainable increase in crop production can be
+    achieved by adoption of suitable agronomic management packages
+    including introduction of new crops etc.
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
 \hypertarget{tools-and-techniques}{%
 \section{Tools and techniques}\label{tools-and-techniques}}
 
 \begin{frame}{Cartography}
 \protect\hypertarget{cartography}{}
+\bcolumns
+\column{0.7\textwidth}
+\small
+
 \begin{itemize}
 \tightlist
 \item
@@ -358,17 +404,7 @@ Assistant Professor\\
   aesthetics and technique, cartography builds on the premise that
   reality can be modeled in ways that communicate spatial information
   effectively.
-\item
-  Coordinate reference system defines how the visual mapping of spatial
-  data should be done
-
-  \begin{itemize}
-  \tightlist
-  \item
-    CRS has projection parameters, which is configurable giving a
-    variation in mapping
-    \footnote[frame]{\url{https://proj.org/usage/projections.html}}.
-  \end{itemize}
+  \footnote[frame]{\url{https://proj.org/usage/projections.html}}.
 \item
   Objectives of traditional cartography:
 
@@ -386,10 +422,42 @@ Assistant Professor\\
     Organize the elements of the map to best convey its message (map
     design)
   \end{itemize}
+\end{itemize}
+
+\column{0.3\textwidth}
+
+\textbf{Design matters!}
+
+\includegraphics[width=0.98\linewidth]{../images/you-will-always-be-mine-psychology}
+
+\ecolumns
+\end{frame}
+
+\begin{frame}{}
+\protect\hypertarget{section-3}{}
+\begin{itemize}
+\tightlist
+\item
+  Coordinate reference system defines how the visual mapping of spatial
+  data should be done
+
+  \begin{itemize}
+  \tightlist
+  \item
+    CRS has projection parameters, which is configurable giving a
+    variation in mapping
+  \end{itemize}
 \item
   Modern cartography constitutes theoretical and practical foundations
   of GIS and Geographic information
   science\footnote[frame]{Overview of CRS (in R) is available at: \url{https://www.nceas.ucsb.edu/sites/default/files/2020-04/OverviewCoordinateReferenceSystems.pdf}}.
+\item
+  EPSG Geodetic Parameter Dataset (also EPSG registry) is a public
+  registry of geodetic datums, spatial reference systems, Earth
+  ellipsoids, coordinate transformations and related units of
+  measurement. Originally created by European Petroleum Survey Group
+  (EPSG). Each entity is assigned an EPSG code between 1024-32767, along
+  with a standard machine-readable well-known text (WKT) representation.
 \end{itemize}
 \end{frame}
 
@@ -450,7 +518,7 @@ Assistant Professor\\
 
 \begin{frame}{Thematic cartography}
 \protect\hypertarget{thematic-cartography}{}
-\begin{center}\includegraphics[width=0.66\linewidth]{03.4-geoinformatics_common_issues_files/figure-beamer/nepal-sf-dataframe-thematic-1} \end{center}
+\begin{center}\includegraphics[width=0.62\linewidth]{03.4-geoinformatics_common_issues_files/figure-beamer/nepal-sf-dataframe-thematic-1} \end{center}
 \end{frame}
 
 \begin{frame}{Projections}
@@ -489,13 +557,13 @@ Airy & Collignon & Fahey & rHEALPix & Lambert Conformal Conic & Mollweide & Orte
 \end{frame}
 
 \begin{frame}{}
-\protect\hypertarget{section-2}{}
+\protect\hypertarget{section-4}{}
 \setlength{\tabcolsep}{2pt}
 
 \begin{table}
 \centering\begingroup\fontsize{4}{6}\selectfont
 
-\begin{tabular}{>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}>{\raggedright\arraybackslash}p{8em}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}>{\raggedright\arraybackslash}p{9em}}
 \toprule
 Projection & Projection & Projection & Projection & Projection & Projection & Projection & Projection & Projection & Projection\\
 \midrule
@@ -517,108 +585,259 @@ Cal Coop Ocean Fish Invest Lines/Stations &  &  &  &  &  &  &  &  & Winkel Tripe
 \end{frame}
 
 \begin{frame}{}
-\protect\hypertarget{section-3}{}
+\protect\hypertarget{section-5}{}
 \footnotesize
 
-EPSG codes for commonly used CRS (in the U.S.)
+\begin{itemize}
+\tightlist
+\item
+  Projections are generally given a name so that they can be easily
+  identified and referenced on a map.
 
-\begin{enumerate}
+  \begin{itemize}
+  \footnotesize
+  \item named after the person(s) who invented them (eg Mercator); or aspects of the projection (eg Equidistant Conic); or a combination of the two (eg Lambert Conformal Conic).
+  \end{itemize}
+\item
+  All projections result in some distortion of the relationships between
+  features on the sphere when they are projected onto a flat surface.
+  These distortions include:
+
+  \begin{itemize}
+  \footnotesize
+  \item direction between a feature and surrounding features
+  \item distance between a feature and surrounding features
+  \item shape of any feature
+  \item size of any feature
+  \end{itemize}
+\item
+  Only `projection' which has all the features without distortion in a
+  globe.
+\item
+  This problem is in part due to the changing relationship between
+  latitude and longitude.
+
+  \begin{itemize}
+  \footnotesize
+  \item Near the Equator a 'block' of $1^\circ \times 1^\circ$ latitude and longitude is almost a square, while the same 'block' near the poles is almost a triangle.
+  \end{itemize}
+\item
+  Technical terms used to describe the line of latitude or longitude
+  where this imaginary `piece of paper' touches the Earth are:
+
+  \begin{itemize}
+  \footnotesize
+  \item latitude – standard parallel
+  \item longitude – central meridian
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Basic Projection Types}
+\protect\hypertarget{basic-projection-types}{}
+\begin{itemize}
+\tightlist
+\item
+  This describes how a map shows the positional relationship between two
+  features, and their size and shape.
+\item
+  Depending on their intended use, projections are chosen to preserve a
+  particular relationship or characteristic. These include:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Equal-Area: correctly shows the size of a feature
+  \item
+    Conformal: correctly shows the shape of features (A map can not be
+    both equal-area or conformal -- it can only be one; or the other; or
+    neither.)
+  \item
+    Equidistant: correctly shows the distance between two features
+  \item
+    True Direction: correctly shows the direction between two features
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Basic Projection Techniques}
+\protect\hypertarget{basic-projection-techniques}{}
+\bcolumns
+\small
+\column{0.55\textwidth}
+
+\begin{itemize}
+\tightlist
+\item
+  For an imaginary `piece of paper' touching the Earth, there are 3
+  basic techniques used to create a projection and therefore a map.
+  These are:
+
+  \begin{itemize}
+  \footnotesize
+  \item azimuthal: the imaginary 'piece of paper' is flat, this is usually used over Polar areas
+  \item conical: the imaginary 'piece of paper' is rolled into a cone, this is usually used in mid-latitude areas (approximately $20^\circ - 60^\circ$ North and South)
+  \item cylindrical: the imaginary 'piece of paper' is rolled into a cylinder, this is usually used over Equatorial areas or for World Maps
+  \end{itemize}
+\item
+  Each of the basic techniques have different distortions and therefore
+  limitations to their use.
+\end{itemize}
+
+\column{0.45\textwidth}
+
+\begin{figure}
+\includegraphics[width=0.98\linewidth]{../images/Antarctica comp_1} \caption{Azimuth is a mathematical concept with relates to the relationship between a point and the 'flat piece of paper' that 'touches' the Earth. Maps produced using Azimuthal Projections (often called polar projections) techniques have lines of longitude fanning out from the centre and lines of latitude as concentric circles. It is usually measured as an angle. The projection have distortions increasing away from the central point.}\label{fig:azimuthal-projection}
+\end{figure}
+
+\ecolumns
+\end{frame}
+
+\begin{frame}{}
+\protect\hypertarget{section-6}{}
+\bcolumns
+\column{0.5\textwidth}
+
+\begin{figure}
+\includegraphics[width=0.55\linewidth]{../images/conic-world} \caption{This map is centred on central Australia and the Standard Parallel is $25^\circ$ South. Note how the shapes of land masses near the Standard Parallel are fairly close to the true shape when viewed from space. This includes Australia, South America and the 'tip' of Africa. Also note how land masses furthest away from the Standard Parallel are very distorted when compared to the views from space. Particularly note how massively large northern Canada and the Arctic icecaps look.}\label{fig:conic-projection}
+\end{figure}
+
+\begin{center}\includegraphics[width=0.28\linewidth]{../images/conic_projection_cap} \end{center}
+
+\column{0.5\textwidth}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=0.7\linewidth]{../images/cylindrical_projection.png}
+  \end{center}
+  \begin{columns}[T,onlytextwidth]
+  \column{.45\linewidth}
+  \begin{center}
+  \includegraphics[width=0.65\linewidth]{../images/cylindrical_projection_cap.jpg}
+  \end{center}
+  \column{.55\linewidth}
+  \caption{\newline\tiny This follows the concept of a 'piece of paper' being rolled into a cylinder and touching the Earth on a circular line. Notice the huge distortions in the Arctic and Antarctic regions, but the reasonable representation of landmasses out to about 50° north and south. Projection information: Mercator; centred on 140° East and the Standard Parallel is the Equator}
+  \label{fig:cylinder-project}
+  
+  \end{columns}
+\end{figure}
+
+\ecolumns
+\end{frame}
+
+\begin{frame}{Mercator projection}
+\protect\hypertarget{mercator-projection}{}
+\small
+
+\begin{itemize}
+\tightlist
+\item
+  Standard map projection for nautical purposes because of its ability
+  to represent lines of constant true direction.
+\item
+  The cylinder is usually positioned over the Equator, but this is not
+  essential (but always has the Equator as its Standard Parallel).
+\item
+  Its construction is such that the lines of longitude and latitude are
+  at right angles to each other - this means that a world map is always
+  a rectangle.
+\item
+  The lines of longitude are evenly spaced apart. But the distance
+  between the lines of latitude increase away from the Equator.
+\item
+  Despite some distortions the Mercator projection is generally regarded
+  as being a conformal projection. This is because within small areas
+  shapes are essentially true.
+\item
+  Tiles from Google Maps, Open Street Maps, Stamen map are projected in
+  Mercator (assigned EPSG code: 3857)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Universal Traverse Mercator (UTM) projection}
+\protect\hypertarget{universal-traverse-mercator-utm-projection}{}
+\footnotesize
+
+\begin{itemize}
+\tightlist
+\item
+  UTM coordinate comprises a zone number, a hemisphere (N/S), an easting
+  and a northing. Eastings are referenced from the central meridian of
+  each zone, \& northings from the equator, both in metres. To avoid
+  negative numbers, `false eastings' and `false northings' are used:
+\item
+  Eastings are measured from 500,000 metres west of the central
+  meridian. Eastings (at the equator) range from 166,021m to 833,978m
+  (the range decreases moving away from the equator); a point on the the
+  central meridian has the value 500,000m.
+\item
+  In the northern hemisphere, northings are measured from the equator -
+  ranging from 0 at the equator to 9,329,005m at 84 degree N). In the
+  southern hemisphere they are measured from 10,000,000 metres south of
+  the equator (close to the pole) - ranging from 1,116,915m at 80 degree
+  S to 10,000,000m at the equator.
+\item
+  Nepal lies in the UTM zone of 440N and 450N. The scale factor is
+  0.9996 for the central meridian. 10 49' east or west of central
+  meridian has the scale factor of 1.
+\end{itemize}
+
+\scriptsize
+
+\begin{itemize}
+\tightlist
+\item
+  Norway/Svalbard: the designers of UTM made two exceptions to the rule.
+  The part of zone 31 covering western Norway is transferred to zone 32,
+  and the zones covering Svalbard are tweaked to keep Svalbard in two
+  zones (it's easier to understand looking at a map). These widened
+  zones are viable partly because zones are much narrower so far north,
+  so little precision is lost in merging them.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Coordinate reference system (CRS)}
+\protect\hypertarget{coordinate-reference-system-crs}{}
+\bcolumns
+\column{0.5\textwidth}
+\footnotesize
+
+\begin{itemize}
 \tightlist
 \item
   Latitude/Longitude
 
   \begin{itemize}
-    \scriptsize
-    \item WGS84 (EPSG: 4326)
-    \item Commonly used by organizations that provide GIS data for the entire globe or many countries. CRS used by Google Earth
-    \end{itemize}
+  \scriptsize
+  \item WGS84 (EPSG: 4326)
+  \item Commonly used by organizations that provide GIS data for the entire globe or many countries. CRS used by Google Earth
+  \end{itemize}
 \item
   NAD83 (EPSG:4269)
 
   \begin{itemize}
-    \scriptsize
-    \item Most commonly used by U.S. federal agencies.
-    \end{itemize}
+  \scriptsize
+  \item Most commonly used by U.S. federal agencies.
+  \end{itemize}
 \item
   NAD27 (EPSG: 4267)
 
   \begin{itemize}
-    \scriptsize
-    \item Old version of NAD83
-    \end{itemize}
+  \scriptsize
+  \item Old version of NAD83
+  \end{itemize}
 \item
   Projected (Easting/Northing)
 
   \begin{itemize}
-    \scriptsize
-    \item UTM, Zone 10 (EPSG: 32610)
-    \item Zone 10 is used in the Pacific Northwest
-    \end{itemize}
-\item
-  Mercator (EPSG: 3857); Tiles from Google Maps, Open Street Maps,
-  Stamen map
-\end{enumerate}
-\end{frame}
-
-\begin{frame}{Universal Transverse Mercator}
-\protect\hypertarget{universal-transverse-mercator}{}
-\footnotesize
-
-UTM coordinate comprises a zone number, a hemisphere (N/S), an easting
-and a northing. Eastings are referenced from the central meridian of
-each zone, \& northings from the equator, both in metres. To avoid
-negative numbers, `false eastings' and `false northings' are used:
-
-Eastings are measured from 500,000 metres west of the central meridian.
-Eastings (at the equator) range from 166,021m to 833,978m (the range
-decreases moving away from the equator); a point on the the central
-meridian has the value 500,000m.
-
-In the northern hemisphere, northings are measured from the equator -
-ranging from 0 at the equator to 9,329,005m at 84 degree N). In the
-southern hemisphere they are measured from 10,000,000 metres south of
-the equator (close to the pole) - ranging from 1,116,915m at 80 degree S
-to 10,000,000m at the equator.
-
-Nepal lies in the UTM zone of 440N and 450N. The scale factor is 0.9996
-for the central meridian. 10 49' east or west of central meridian has
-the scale factor of 1.
-
-\scriptsize
-
-Norway/Svalbard: the designers of UTM made two exceptions to the rule.
-The part of zone 31 covering western Norway is transferred to zone 32,
-and the zones covering Svalbard are tweaked to keep Svalbard in two
-zones (it's easier to understand looking at a map). These widened zones
-are viable partly because zones are much narrower so far north, so
-little precision is lost in merging them.
-\end{frame}
-
-\begin{frame}{}
-\protect\hypertarget{section-4}{}
-\begin{columns}[T, onlytextwidth]
-\column{0.3\textwidth}
-
-
-\includegraphics[width=0.99\linewidth]{../images/UTM_projection} 
-
-\column{0.7\textwidth}
-
-\begin{itemize}
-\scriptsize
-\item Traditionally Universal Transverse Mercator (UTM) Projection system has been in use in Nepal; Mercator projection is Conformal Cylindrical Projection.
-\item In Transverse projection, Earth is wrapped around a cylinder in such a manner that point of tangency between Globe and Cylinder is a meridian, or line of longitude, called Central Meridian. In Conformal or Orthomorphic Projection, the shape/angle is preserved even though the length and breadth may distort.
-\item UTM consists total of 60 zones of longitude each of 60 extending from 180 W to 180 E. 180 W to 174 W is designated as zone 1 with the central meridian of 177 W and other zone goes as so on and so further manner. Further zone are divided in rows with a difference of 8. These zone extend from 80 S Latitude to 84 N latitude. The first Latitude zone is designated with letter C for 80 S to 72 S latitude.
-\item In recent years with cadastral survey and various accuracy techniques, Nepal has default projection set to MUTM (Modified UTM) -- a Gauss-Krueger projection-based coordinate system. In this system, earth is divided in 120 zones each of 3 degree.
-\item Nepal has central meridian of 81 degree, 84 degree and 87 degree.
-\item Scale factor of 0.9999 is used for central meridian normally for 84 degree and 0 degree 55 minutes east or west of central meridian has the scale factor of 1 (meaning no distortion).
-\item False Easting at central meridian is 500,000 m in order to keep all the coordinates within the country positive, and False Northing at the Equator is 0 m.
+  \scriptsize
+  \item UTM, Zone 10 (EPSG: 32610)
+  \item Zone 10 is used in the Pacific Northwest
+  \end{itemize}
 \end{itemize}
-\end{columns}
-\end{frame}
 
-\begin{frame}[fragile]{}
-\protect\hypertarget{section-5}{}
+\column{0.5\textwidth}
+
 \tiny
 
 \begin{verbatim}
@@ -666,44 +885,15 @@ little precision is lost in merging them.
 \end{verbatim}
 
 \begin{verbatim}
-## CRS arguments:
+## Coordinate Reference System:
+## Deprecated Proj.4 representation:
 ##  +proj=utm +zone=19 +datum=NAD83 +units=m +no_defs +ellps=GRS80
 ## +towgs84=0,0,0
 \end{verbatim}
 
 \normalsize
-\end{frame}
 
-\begin{frame}{}
-\protect\hypertarget{section-6}{}
-\begin{columns}
-\column{0.5\textwidth}
-
-
-\includegraphics[width=0.95\linewidth]{03.4-geoinformatics_common_issues_files/figure-beamer/map-projection-mercator-1} 
-
-\column{0.5\textwidth}
-
-
-\includegraphics[width=0.95\linewidth]{03.4-geoinformatics_common_issues_files/figure-beamer/map-projection-utm-1} 
-
-\end{columns}
-\end{frame}
-
-\begin{frame}{}
-\protect\hypertarget{section-7}{}
-\begin{columns}
-\column{0.5\textwidth}
-
-
-\includegraphics[width=0.95\linewidth]{03.4-geoinformatics_common_issues_files/figure-beamer/map-projection-azimuthal-1} 
-
-\column{0.5\textwidth}
-
-
-\includegraphics[width=0.95\linewidth]{03.4-geoinformatics_common_issues_files/figure-beamer/map-projection-robinson-1} 
-
-\end{columns}
+\ecolumns
 \end{frame}
 
 \begin{frame}{Use in precision agriculture}
@@ -757,7 +947,7 @@ little precision is lost in merging them.
 \end{frame}
 
 \begin{frame}{}
-\protect\hypertarget{section-8}{}
+\protect\hypertarget{section-7}{}
 \begin{enumerate}
 \setcounter{enumi}{3}
 \tightlist
@@ -794,7 +984,7 @@ little precision is lost in merging them.
 \end{frame}
 
 \begin{frame}{}
-\protect\hypertarget{section-9}{}
+\protect\hypertarget{section-8}{}
 \begin{enumerate}
 \setcounter{enumi}{5}
 \tightlist
@@ -869,7 +1059,7 @@ agriculture}\label{common-issues-and-concerns-of-geoinformatics-in-nepalese-agri
 \end{frame}
 
 \begin{frame}{}
-\protect\hypertarget{section-10}{}
+\protect\hypertarget{section-9}{}
 \begin{itemize}
 \tightlist
 \item
